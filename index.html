@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="th">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#0757d7">
+<title>AR English – 5 Fun Categories</title>
+<script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@ar-js-org/ar.js@3.4.8/aframe/build/aframe-ar.js"></script>
+<style>
+:root{--blue:#0757d7;--dark:#12306b;--yellow:#ffd43b;--green:#24b15a;--pink:#ec3f75}
+*{box-sizing:border-box} body{margin:0;font-family:Tahoma,Arial,sans-serif;background:#eef7ff;color:#10234b}
+button{font:inherit}.hidden{display:none!important}
+#cover{min-height:100vh;background:#06245f;display:grid;place-items:center;padding:12px}
+.cover-card{width:min(100%,1100px);position:relative;border-radius:26px;overflow:hidden;box-shadow:0 20px 60px #0008}
+.cover-card img{display:block;width:100%;height:auto}
+.cover-actions{position:absolute;left:0;right:0;bottom:2.2%;display:flex;justify-content:center}
+.primary{border:0;border-radius:999px;padding:14px 30px;font-size:clamp(18px,3vw,28px);font-weight:900;background:linear-gradient(#ffe56d,#ffb400);color:#153a8a;box-shadow:0 8px 0 #cc7900,0 12px 25px #0006;cursor:pointer}
+.primary:active{transform:translateY(4px);box-shadow:0 4px 0 #cc7900}
+#menu{min-height:100vh;padding:18px;background:linear-gradient(180deg,#dff4ff,#fff9dc)}
+.topbar{display:flex;align-items:center;justify-content:space-between;gap:10px;max-width:1000px;margin:auto}
+.topbar h1{margin:4px 0;color:#0649bd;font-size:clamp(25px,5vw,42px)}
+.smallbtn{border:0;border-radius:14px;padding:10px 14px;background:#fff;box-shadow:0 4px 12px #174b8f22;font-weight:700;cursor:pointer}
+.stages{max-width:1000px;margin:18px auto;display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px}
+.stage{background:white;border-radius:24px;padding:17px;box-shadow:0 8px 24px #174b8f22;border:4px solid #bcdcff;position:relative}
+.stage h2{margin:0;color:#0745b7}.stage p{margin:6px 0 14px;color:#52617d}
+.stage button{width:100%;border:0;border-radius:14px;padding:12px;font-weight:900;background:#1267e8;color:#fff;cursor:pointer}
+.stage.locked{filter:grayscale(.65);opacity:.72}.stage.locked button{background:#8692a8}
+.badge{position:absolute;right:14px;top:12px;font-size:25px}
+.progress{max-width:1000px;margin:auto;background:#fff;border-radius:999px;padding:5px;box-shadow:inset 0 0 0 1px #cfe0ff}
+.progress>div{height:16px;border-radius:999px;background:linear-gradient(90deg,#38bdf8,#22c55e);width:0%;transition:.4s}
+#game{position:fixed;inset:0;background:#000;overflow:hidden}
+a-scene{position:absolute!important;inset:0}
+.hud{position:absolute;z-index:10;inset:0;pointer-events:none;display:flex;flex-direction:column;justify-content:space-between;padding:max(10px,env(safe-area-inset-top)) 10px max(12px,env(safe-area-inset-bottom))}
+.hud-top,.hud-bottom{pointer-events:auto}
+.hud-top{display:flex;gap:8px;align-items:center}.hud-top .pill{background:#ffffffee;border-radius:14px;padding:9px 12px;font-weight:900;box-shadow:0 4px 14px #0005}
+#stagePill{flex:1;color:#0648b8}.hud-bottom{background:#ffffffef;border-radius:22px;padding:12px;box-shadow:0 8px 30px #0008}
+.instruction{text-align:center;font-weight:800;color:#34415c;margin-bottom:8px}
+.question{text-align:center;font-size:clamp(19px,5vw,30px);font-weight:900;color:#083fa5;margin:4px}
+.thai{text-align:center;color:#58657e;margin-bottom:9px}
+.answers{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.answer{border:0;border-radius:14px;padding:11px 5px;background:#e7f1ff;color:#123d91;font-weight:900;cursor:pointer;min-height:48px}
+.answer.correct{background:#b7f7c8;color:#075d24}.answer.wrong{background:#ffd0d0;color:#9d1616}
+#message{min-height:24px;text-align:center;font-weight:900;margin-top:8px}
+.modal{position:fixed;z-index:30;inset:0;background:#06245fd9;display:grid;place-items:center;padding:20px}
+.modal-card{background:white;border-radius:28px;padding:25px;text-align:center;max-width:480px;width:100%;box-shadow:0 20px 60px #0008}
+.modal-card h2{font-size:32px;color:#0757d7;margin:0 0 8px}.stars{font-size:42px}
+.modal-actions{display:flex;gap:10px;margin-top:15px}.modal-actions button{flex:1}
+.secondary{border:0;border-radius:14px;padding:12px;background:#e8eef9;color:#183b7d;font-weight:900;cursor:pointer}
+.marker-tip{font-size:13px;text-align:center;color:#62708c;margin-top:7px}
+@media(max-width:560px){.answers{grid-template-columns:1fr}.answer{min-height:42px}.cover-actions{bottom:1.5%}.primary{padding:10px 22px}}
+</style>
+</head>
+<body>
+<section id="cover">
+  <div class="cover-card">
+    <img src="assets/cover.png" alt="AR English cover">
+    <div class="cover-actions"><button class="primary" id="enterBtn">เริ่มเล่นเกม</button></div>
+  </div>
+</section>
+
+<section id="menu" class="hidden">
+  <div class="topbar">
+    <h1>AR English Adventure</h1>
+    <button class="smallbtn" id="resetBtn">เริ่มใหม่</button>
+  </div>
+  <div class="progress"><div id="progressBar"></div></div>
+  <div class="stages" id="stageList"></div>
+</section>
+
+<section id="game" class="hidden">
+  <a-scene embedded vr-mode-ui="enabled:false" renderer="antialias:true;alpha:true"
+    arjs="sourceType:webcam;debugUIEnabled:false;trackingMethod:best;">
+    <a-assets id="aAssets"></a-assets>
+    <a-marker preset="hiro" id="hiroMarker">
+      <a-plane id="cardPlane" position="0 0 0" rotation="-90 0 0" width="1.45" height="1.22"
+               material="shader:flat;transparent:true"></a-plane>
+      <a-text id="arWord" value="" position="0 0.04 0.67" rotation="-90 0 0"
+              align="center" color="#063fa5" width="3.6"></a-text>
+    </a-marker>
+    <a-entity camera></a-entity>
+  </a-scene>
+
+  <div class="hud">
+    <div class="hud-top">
+      <button class="smallbtn" id="backBtn">← ด่าน</button>
+      <div class="pill" id="stagePill"></div>
+      <div class="pill" id="scorePill">0/6</div>
+    </div>
+    <div class="hud-bottom">
+      <div class="instruction" id="markerStatus">ส่องกล้องไปที่ HIRO Marker</div>
+      <div class="question" id="question">What is it?</div>
+      <div class="thai" id="reading"></div>
+      <div class="answers" id="answers"></div>
+      <div id="message"></div>
+      <div class="marker-tip">แตะ 🔊 เพื่อฟังคำถาม • อนุญาตการใช้กล้องเมื่อเบราว์เซอร์ถาม</div>
+    </div>
+  </div>
+</section>
+
+<div id="finishModal" class="modal hidden">
+  <div class="modal-card">
+    <div class="stars">⭐ ⭐ ⭐</div>
+    <h2>Excellent!</h2>
+    <p id="finishText"></p>
+    <div class="modal-actions">
+      <button class="secondary" id="menuBtn">กลับหน้าด่าน</button>
+      <button class="primary" id="nextBtn">ด่านต่อไป</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const stages = [{"id": "classroom", "title": "Classroom Objects", "titleTh": "สิ่งของในห้องเรียน", "items": [{"word": "backpack", "reading": "แบ็กแพ็ก", "thai": "กระเป๋านักเรียน", "image": "assets/classroom_backpack.svg"}, {"word": "pencil", "reading": "เพ็นเซิล", "thai": "ดินสอ", "image": "assets/classroom_pencil.svg"}, {"word": "book", "reading": "บุ๊ก", "thai": "หนังสือ", "image": "assets/classroom_book.svg"}, {"word": "ruler", "reading": "รูเลอร์", "thai": "ไม้บรรทัด", "image": "assets/classroom_ruler.svg"}, {"word": "crayons", "reading": "เครยอนส์", "thai": "สีเทียน", "image": "assets/classroom_crayons.svg"}, {"word": "scissors", "reading": "ซิสเซอร์ส", "thai": "กรรไกร", "image": "assets/classroom_scissors.svg"}]}, {"id": "fruits", "title": "Fruits", "titleTh": "ผลไม้", "items": [{"word": "apple", "reading": "แอปเพิล", "thai": "แอปเปิล", "image": "assets/fruits_apple.svg"}, {"word": "banana", "reading": "บะนานา", "thai": "กล้วย", "image": "assets/fruits_banana.svg"}, {"word": "orange", "reading": "ออเรนจ์", "thai": "ส้ม", "image": "assets/fruits_orange.svg"}, {"word": "grapes", "reading": "เกรปส์", "thai": "องุ่น", "image": "assets/fruits_grapes.svg"}, {"word": "pineapple", "reading": "ไพน์แอปเพิล", "thai": "สับปะรด", "image": "assets/fruits_pineapple.svg"}, {"word": "watermelon", "reading": "วอเทอร์เมลอน", "thai": "แตงโม", "image": "assets/fruits_watermelon.svg"}]}, {"id": "colors", "title": "Colors", "titleTh": "สี", "items": [{"word": "red", "reading": "เรด", "thai": "สีแดง", "image": "assets/colors_red.svg"}, {"word": "blue", "reading": "บลู", "thai": "สีน้ำเงิน", "image": "assets/colors_blue.svg"}, {"word": "yellow", "reading": "เยลโลว์", "thai": "สีเหลือง", "image": "assets/colors_yellow.svg"}, {"word": "green", "reading": "กรีน", "thai": "สีเขียว", "image": "assets/colors_green.svg"}, {"word": "purple", "reading": "เพอร์เพิล", "thai": "สีม่วง", "image": "assets/colors_purple.svg"}, {"word": "orange", "reading": "ออเรนจ์", "thai": "สีส้ม", "image": "assets/colors_orange.svg"}]}, {"id": "family", "title": "Family Members", "titleTh": "สมาชิกในครอบครัว", "items": [{"word": "grandfather", "reading": "แกรนด์ฟาเธอร์", "thai": "คุณปู่/คุณตา", "image": "assets/family_grandfather.svg"}, {"word": "grandmother", "reading": "แกรนด์มาเธอร์", "thai": "คุณย่า/คุณยาย", "image": "assets/family_grandmother.svg"}, {"word": "father", "reading": "ฟาเธอร์", "thai": "พ่อ", "image": "assets/family_father.svg"}, {"word": "mother", "reading": "มาเธอร์", "thai": "แม่", "image": "assets/family_mother.svg"}, {"word": "brother", "reading": "บราเธอร์", "thai": "พี่ชาย/น้องชาย", "image": "assets/family_brother.svg"}, {"word": "sister", "reading": "ซิสเทอร์", "thai": "พี่สาว/น้องสาว", "image": "assets/family_sister.svg"}]}, {"id": "vehicles", "title": "Vehicles", "titleTh": "ยานพาหนะ", "items": [{"word": "car", "reading": "คาร์", "thai": "รถยนต์", "image": "assets/vehicles_car.svg"}, {"word": "bus", "reading": "บัส", "thai": "รถบัส", "image": "assets/vehicles_bus.svg"}, {"word": "bicycle", "reading": "ไบซิเคิล", "thai": "จักรยาน", "image": "assets/vehicles_bicycle.svg"}, {"word": "motorcycle", "reading": "มอเตอร์ไซเคิล", "thai": "รถจักรยานยนต์", "image": "assets/vehicles_motorcycle.svg"}, {"word": "airplane", "reading": "แอร์เพลน", "thai": "เครื่องบิน", "image": "assets/vehicles_airplane.svg"}, {"word": "train", "reading": "เทรน", "thai": "รถไฟ", "image": "assets/vehicles_train.svg"}]}];
+const state = {
+  unlocked: Math.max(1, Number(localStorage.getItem('arUnlocked')||1)),
+  completed: JSON.parse(localStorage.getItem('arCompleted')||'[]'),
+  stageIndex: 0, order: [], q: 0, score: 0, lockedAnswer:false
+};
+const $=s=>document.querySelector(s);
+function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
+function save(){localStorage.setItem('arUnlocked',state.unlocked);localStorage.setItem('arCompleted',JSON.stringify(state.completed))}
+function speak(text){speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang='en-US';u.rate=.78;speechSynthesis.speak(u)}
+function renderMenu(){
+  const box=$('#stageList');box.innerHTML='';
+  stages.forEach((s,i)=>{
+    const open=i<state.unlocked, done=state.completed.includes(i);
+    const d=document.createElement('div');d.className='stage'+(open?'':' locked');
+    d.innerHTML=`<div class="badge">${done?'✅':open?'⭐':'🔒'}</div><h2>ด่าน ${i+1}: ${s.title}</h2><p>${s.titleTh} • 6 คำศัพท์</p><button>${open?(done?'เล่นอีกครั้ง':'เริ่มด่านนี้'):'ผ่านด่านก่อนหน้าเพื่อปลดล็อก'}</button>`;
+    d.querySelector('button').onclick=()=>open&&startStage(i);box.appendChild(d);
+  });
+  $('#progressBar').style.width=((state.unlocked-1)/4*100)+'%';
+}
+function startStage(i){
+  state.stageIndex=i;state.order=shuffle(stages[i].items);state.q=0;state.score=0;state.lockedAnswer=false;
+  $('#menu').classList.add('hidden');$('#game').classList.remove('hidden');$('#finishModal').classList.add('hidden');
+  $('#stagePill').textContent=`ด่าน ${i+1}: ${stages[i].title}`;showQuestion();
+}
+function showQuestion(){
+  state.lockedAnswer=false;$('#message').textContent='';
+  document.querySelectorAll('.answer').forEach(b=>b.disabled=false);
+  const item=state.order[state.q];
+  $('#cardPlane').setAttribute('src',item.image);
+  $('#arWord').setAttribute('value','');
+  $('#question').innerHTML=`What is it? <button class="smallbtn" onclick="speak('What is it?')">🔊</button>`;
+  $('#reading').textContent='เลือกคำศัพท์ภาษาอังกฤษที่ตรงกับภาพ AR';
+  $('#scorePill').textContent=`${state.score}/6`;
+  const distractors=shuffle(stages[state.stageIndex].items.filter(x=>x.word!==item.word)).slice(0,2);
+  const choices=shuffle([item,...distractors]);const ans=$('#answers');ans.innerHTML='';
+  choices.forEach(c=>{
+    const b=document.createElement('button');b.className='answer';b.textContent=c.word;
+    b.onclick=()=>checkAnswer(b,c,item);ans.appendChild(b);
+  });
+}
+function checkAnswer(btn,chosen,item){
+  if(state.lockedAnswer)return;state.lockedAnswer=true;
+  document.querySelectorAll('.answer').forEach(b=>b.disabled=true);
+  if(chosen.word===item.word){
+    btn.classList.add('correct');state.score++;
+    $('#message').textContent=`✅ ${item.word} (${item.reading}) = ${item.thai}`;
+    speak(`Correct! It is a ${item.word}.`);
+  }else{
+    btn.classList.add('wrong');
+    [...document.querySelectorAll('.answer')].find(b=>b.textContent===item.word)?.classList.add('correct');
+    $('#message').textContent=`💡 คำตอบคือ ${item.word} (${item.reading}) = ${item.thai}`;
+    speak(`The answer is ${item.word}.`);
+  }
+  $('#arWord').setAttribute('value',item.word);
+  $('#scorePill').textContent=`${state.score}/6`;
+  setTimeout(()=>{state.q++;state.q<6?showQuestion():finishStage()},1800);
+}
+function finishStage(){
+  const i=state.stageIndex;if(!state.completed.includes(i))state.completed.push(i);
+  if(i===state.unlocked-1&&state.unlocked<5)state.unlocked++;save();
+  $('#finishText').textContent=`ผ่านด่าน ${i+1} แล้ว ได้ ${state.score} / 6 คะแนน`;
+  $('#nextBtn').textContent=i<4?'ด่านต่อไป':'กลับหน้าด่าน';
+  $('#finishModal').classList.remove('hidden');
+  speak('Excellent! Stage complete.');
+}
+function goMenu(){location.reload()}
+$('#enterBtn').onclick=()=>{$('#cover').classList.add('hidden');$('#menu').classList.remove('hidden');renderMenu()}
+$('#backBtn').onclick=goMenu;$('#menuBtn').onclick=goMenu;
+$('#nextBtn').onclick=()=>{const n=state.stageIndex+1;n<5?startStage(n):goMenu()}
+$('#resetBtn').onclick=()=>{if(confirm('ต้องการล้างคะแนนและล็อกด่านใหม่หรือไม่?')){localStorage.removeItem('arUnlocked');localStorage.removeItem('arCompleted');location.reload()}}
+const marker=$('#hiroMarker');
+marker.addEventListener('markerFound',()=>{$('#markerStatus').textContent='พบ Marker แล้ว! ดูภาพและเลือกคำตอบ 🎯'});
+marker.addEventListener('markerLost',()=>{$('#markerStatus').textContent='ส่องกล้องไปที่ HIRO Marker'});
+</script>
+</body>
+</html>
