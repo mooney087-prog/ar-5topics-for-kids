@@ -70,11 +70,44 @@ a-scene{position:absolute!important;inset:0}
 
 <section id="game" class="hidden">
   <a-scene embedded vr-mode-ui="enabled:false" renderer="antialias:true;alpha:true"
-    arjs="sourceType:webcam;debugUIEnabled:false;trackingMethod:best;">
-    <a-assets id="aAssets"></a-assets>
+    arjs="sourceType:webcam;debugUIEnabled:false;trackingMethod:best;detectionMode:mono;matrixCodeType:3x3;">
+    <a-assets id="aAssets" timeout="15000">
+<img id="classroom_backpack" src="assets/classroom_backpack.png" crossorigin="anonymous">
+<img id="classroom_pencil" src="assets/classroom_pencil.png" crossorigin="anonymous">
+<img id="classroom_book" src="assets/classroom_book.png" crossorigin="anonymous">
+<img id="classroom_ruler" src="assets/classroom_ruler.png" crossorigin="anonymous">
+<img id="classroom_crayons" src="assets/classroom_crayons.png" crossorigin="anonymous">
+<img id="classroom_scissors" src="assets/classroom_scissors.png" crossorigin="anonymous">
+<img id="fruits_apple" src="assets/fruits_apple.png" crossorigin="anonymous">
+<img id="fruits_banana" src="assets/fruits_banana.png" crossorigin="anonymous">
+<img id="fruits_orange" src="assets/fruits_orange.png" crossorigin="anonymous">
+<img id="fruits_grapes" src="assets/fruits_grapes.png" crossorigin="anonymous">
+<img id="fruits_pineapple" src="assets/fruits_pineapple.png" crossorigin="anonymous">
+<img id="fruits_watermelon" src="assets/fruits_watermelon.png" crossorigin="anonymous">
+<img id="colors_red" src="assets/colors_red.png" crossorigin="anonymous">
+<img id="colors_blue" src="assets/colors_blue.png" crossorigin="anonymous">
+<img id="colors_yellow" src="assets/colors_yellow.png" crossorigin="anonymous">
+<img id="colors_green" src="assets/colors_green.png" crossorigin="anonymous">
+<img id="colors_purple" src="assets/colors_purple.png" crossorigin="anonymous">
+<img id="colors_orange" src="assets/colors_orange.png" crossorigin="anonymous">
+<img id="family_grandfather" src="assets/family_grandfather.png" crossorigin="anonymous">
+<img id="family_grandmother" src="assets/family_grandmother.png" crossorigin="anonymous">
+<img id="family_father" src="assets/family_father.png" crossorigin="anonymous">
+<img id="family_mother" src="assets/family_mother.png" crossorigin="anonymous">
+<img id="family_brother" src="assets/family_brother.png" crossorigin="anonymous">
+<img id="family_sister" src="assets/family_sister.png" crossorigin="anonymous">
+<img id="vehicles_car" src="assets/vehicles_car.png" crossorigin="anonymous">
+<img id="vehicles_bus" src="assets/vehicles_bus.png" crossorigin="anonymous">
+<img id="vehicles_bicycle" src="assets/vehicles_bicycle.png" crossorigin="anonymous">
+<img id="vehicles_motorcycle" src="assets/vehicles_motorcycle.png" crossorigin="anonymous">
+<img id="vehicles_airplane" src="assets/vehicles_airplane.png" crossorigin="anonymous">
+<img id="vehicles_train" src="assets/vehicles_train.png" crossorigin="anonymous">
+</a-assets>
     <a-marker preset="hiro" id="hiroMarker">
-      <a-plane id="cardPlane" position="0 0 0" rotation="-90 0 0" width="1.45" height="1.22"
-               material="shader:flat;transparent:true"></a-plane>
+      <a-image id="cardPlane" position="0 0.03 0" rotation="-90 0 0" width="1.45" height="1.22"
+               material="shader:flat;transparent:true;side:double" visible="true"></a-image>
+      <a-plane position="0 -0.01 0" rotation="-90 0 0" width="1.56" height="1.33"
+               material="color:#ffffff;shader:flat;side:double"></a-plane>
       <a-text id="arWord" value="" position="0 0.04 0.67" rotation="-90 0 0"
               align="center" color="#063fa5" width="3.6"></a-text>
     </a-marker>
@@ -93,7 +126,7 @@ a-scene{position:absolute!important;inset:0}
       <div class="thai" id="reading"></div>
       <div class="answers" id="answers"></div>
       <div id="message"></div>
-      <div class="marker-tip">แตะ 🔊 เพื่อฟังคำถาม • อนุญาตการใช้กล้องเมื่อเบราว์เซอร์ถาม</div>
+      <div class="marker-tip">แตะ 🔊 เพื่อฟังคำถาม • ต้องเปิดผ่าน HTTPS/GitHub Pages • เห็นกรอบดำของ HIRO ครบทั้ง 4 ด้าน</div>
     </div>
   </div>
 </section>
@@ -111,7 +144,7 @@ a-scene{position:absolute!important;inset:0}
 </div>
 
 <script>
-const stages = [{"id": "classroom", "title": "Classroom Objects", "titleTh": "สิ่งของในห้องเรียน", "items": [{"word": "backpack", "reading": "แบ็กแพ็ก", "thai": "กระเป๋านักเรียน", "image": "assets/classroom_backpack.svg"}, {"word": "pencil", "reading": "เพ็นเซิล", "thai": "ดินสอ", "image": "assets/classroom_pencil.svg"}, {"word": "book", "reading": "บุ๊ก", "thai": "หนังสือ", "image": "assets/classroom_book.svg"}, {"word": "ruler", "reading": "รูเลอร์", "thai": "ไม้บรรทัด", "image": "assets/classroom_ruler.svg"}, {"word": "crayons", "reading": "เครยอนส์", "thai": "สีเทียน", "image": "assets/classroom_crayons.svg"}, {"word": "scissors", "reading": "ซิสเซอร์ส", "thai": "กรรไกร", "image": "assets/classroom_scissors.svg"}]}, {"id": "fruits", "title": "Fruits", "titleTh": "ผลไม้", "items": [{"word": "apple", "reading": "แอปเพิล", "thai": "แอปเปิล", "image": "assets/fruits_apple.svg"}, {"word": "banana", "reading": "บะนานา", "thai": "กล้วย", "image": "assets/fruits_banana.svg"}, {"word": "orange", "reading": "ออเรนจ์", "thai": "ส้ม", "image": "assets/fruits_orange.svg"}, {"word": "grapes", "reading": "เกรปส์", "thai": "องุ่น", "image": "assets/fruits_grapes.svg"}, {"word": "pineapple", "reading": "ไพน์แอปเพิล", "thai": "สับปะรด", "image": "assets/fruits_pineapple.svg"}, {"word": "watermelon", "reading": "วอเทอร์เมลอน", "thai": "แตงโม", "image": "assets/fruits_watermelon.svg"}]}, {"id": "colors", "title": "Colors", "titleTh": "สี", "items": [{"word": "red", "reading": "เรด", "thai": "สีแดง", "image": "assets/colors_red.svg"}, {"word": "blue", "reading": "บลู", "thai": "สีน้ำเงิน", "image": "assets/colors_blue.svg"}, {"word": "yellow", "reading": "เยลโลว์", "thai": "สีเหลือง", "image": "assets/colors_yellow.svg"}, {"word": "green", "reading": "กรีน", "thai": "สีเขียว", "image": "assets/colors_green.svg"}, {"word": "purple", "reading": "เพอร์เพิล", "thai": "สีม่วง", "image": "assets/colors_purple.svg"}, {"word": "orange", "reading": "ออเรนจ์", "thai": "สีส้ม", "image": "assets/colors_orange.svg"}]}, {"id": "family", "title": "Family Members", "titleTh": "สมาชิกในครอบครัว", "items": [{"word": "grandfather", "reading": "แกรนด์ฟาเธอร์", "thai": "คุณปู่/คุณตา", "image": "assets/family_grandfather.svg"}, {"word": "grandmother", "reading": "แกรนด์มาเธอร์", "thai": "คุณย่า/คุณยาย", "image": "assets/family_grandmother.svg"}, {"word": "father", "reading": "ฟาเธอร์", "thai": "พ่อ", "image": "assets/family_father.svg"}, {"word": "mother", "reading": "มาเธอร์", "thai": "แม่", "image": "assets/family_mother.svg"}, {"word": "brother", "reading": "บราเธอร์", "thai": "พี่ชาย/น้องชาย", "image": "assets/family_brother.svg"}, {"word": "sister", "reading": "ซิสเทอร์", "thai": "พี่สาว/น้องสาว", "image": "assets/family_sister.svg"}]}, {"id": "vehicles", "title": "Vehicles", "titleTh": "ยานพาหนะ", "items": [{"word": "car", "reading": "คาร์", "thai": "รถยนต์", "image": "assets/vehicles_car.svg"}, {"word": "bus", "reading": "บัส", "thai": "รถบัส", "image": "assets/vehicles_bus.svg"}, {"word": "bicycle", "reading": "ไบซิเคิล", "thai": "จักรยาน", "image": "assets/vehicles_bicycle.svg"}, {"word": "motorcycle", "reading": "มอเตอร์ไซเคิล", "thai": "รถจักรยานยนต์", "image": "assets/vehicles_motorcycle.svg"}, {"word": "airplane", "reading": "แอร์เพลน", "thai": "เครื่องบิน", "image": "assets/vehicles_airplane.svg"}, {"word": "train", "reading": "เทรน", "thai": "รถไฟ", "image": "assets/vehicles_train.svg"}]}];
+const stages = [{"id": "classroom", "title": "Classroom Objects", "titleTh": "สิ่งของในห้องเรียน", "items": [{"word": "backpack", "reading": "แบ็กแพ็ก", "thai": "กระเป๋านักเรียน", "image": "assets/classroom_backpack.png", "assetId": "classroom_backpack"}, {"word": "pencil", "reading": "เพ็นเซิล", "thai": "ดินสอ", "image": "assets/classroom_pencil.png", "assetId": "classroom_pencil"}, {"word": "book", "reading": "บุ๊ก", "thai": "หนังสือ", "image": "assets/classroom_book.png", "assetId": "classroom_book"}, {"word": "ruler", "reading": "รูเลอร์", "thai": "ไม้บรรทัด", "image": "assets/classroom_ruler.png", "assetId": "classroom_ruler"}, {"word": "crayons", "reading": "เครยอนส์", "thai": "สีเทียน", "image": "assets/classroom_crayons.png", "assetId": "classroom_crayons"}, {"word": "scissors", "reading": "ซิสเซอร์ส", "thai": "กรรไกร", "image": "assets/classroom_scissors.png", "assetId": "classroom_scissors"}]}, {"id": "fruits", "title": "Fruits", "titleTh": "ผลไม้", "items": [{"word": "apple", "reading": "แอปเพิล", "thai": "แอปเปิล", "image": "assets/fruits_apple.png", "assetId": "fruits_apple"}, {"word": "banana", "reading": "บะนานา", "thai": "กล้วย", "image": "assets/fruits_banana.png", "assetId": "fruits_banana"}, {"word": "orange", "reading": "ออเรนจ์", "thai": "ส้ม", "image": "assets/fruits_orange.png", "assetId": "fruits_orange"}, {"word": "grapes", "reading": "เกรปส์", "thai": "องุ่น", "image": "assets/fruits_grapes.png", "assetId": "fruits_grapes"}, {"word": "pineapple", "reading": "ไพน์แอปเพิล", "thai": "สับปะรด", "image": "assets/fruits_pineapple.png", "assetId": "fruits_pineapple"}, {"word": "watermelon", "reading": "วอเทอร์เมลอน", "thai": "แตงโม", "image": "assets/fruits_watermelon.png", "assetId": "fruits_watermelon"}]}, {"id": "colors", "title": "Colors", "titleTh": "สี", "items": [{"word": "red", "reading": "เรด", "thai": "สีแดง", "image": "assets/colors_red.png", "assetId": "colors_red"}, {"word": "blue", "reading": "บลู", "thai": "สีน้ำเงิน", "image": "assets/colors_blue.png", "assetId": "colors_blue"}, {"word": "yellow", "reading": "เยลโลว์", "thai": "สีเหลือง", "image": "assets/colors_yellow.png", "assetId": "colors_yellow"}, {"word": "green", "reading": "กรีน", "thai": "สีเขียว", "image": "assets/colors_green.png", "assetId": "colors_green"}, {"word": "purple", "reading": "เพอร์เพิล", "thai": "สีม่วง", "image": "assets/colors_purple.png", "assetId": "colors_purple"}, {"word": "orange", "reading": "ออเรนจ์", "thai": "สีส้ม", "image": "assets/colors_orange.png", "assetId": "colors_orange"}]}, {"id": "family", "title": "Family Members", "titleTh": "สมาชิกในครอบครัว", "items": [{"word": "grandfather", "reading": "แกรนด์ฟาเธอร์", "thai": "คุณปู่/คุณตา", "image": "assets/family_grandfather.png", "assetId": "family_grandfather"}, {"word": "grandmother", "reading": "แกรนด์มาเธอร์", "thai": "คุณย่า/คุณยาย", "image": "assets/family_grandmother.png", "assetId": "family_grandmother"}, {"word": "father", "reading": "ฟาเธอร์", "thai": "พ่อ", "image": "assets/family_father.png", "assetId": "family_father"}, {"word": "mother", "reading": "มาเธอร์", "thai": "แม่", "image": "assets/family_mother.png", "assetId": "family_mother"}, {"word": "brother", "reading": "บราเธอร์", "thai": "พี่ชาย/น้องชาย", "image": "assets/family_brother.png", "assetId": "family_brother"}, {"word": "sister", "reading": "ซิสเทอร์", "thai": "พี่สาว/น้องสาว", "image": "assets/family_sister.png", "assetId": "family_sister"}]}, {"id": "vehicles", "title": "Vehicles", "titleTh": "ยานพาหนะ", "items": [{"word": "car", "reading": "คาร์", "thai": "รถยนต์", "image": "assets/vehicles_car.png", "assetId": "vehicles_car"}, {"word": "bus", "reading": "บัส", "thai": "รถบัส", "image": "assets/vehicles_bus.png", "assetId": "vehicles_bus"}, {"word": "bicycle", "reading": "ไบซิเคิล", "thai": "จักรยาน", "image": "assets/vehicles_bicycle.png", "assetId": "vehicles_bicycle"}, {"word": "motorcycle", "reading": "มอเตอร์ไซเคิล", "thai": "รถจักรยานยนต์", "image": "assets/vehicles_motorcycle.png", "assetId": "vehicles_motorcycle"}, {"word": "airplane", "reading": "แอร์เพลน", "thai": "เครื่องบิน", "image": "assets/vehicles_airplane.png", "assetId": "vehicles_airplane"}, {"word": "train", "reading": "เทรน", "thai": "รถไฟ", "image": "assets/vehicles_train.png", "assetId": "vehicles_train"}]}];
 const state = {
   unlocked: Math.max(1, Number(localStorage.getItem('arUnlocked')||1)),
   completed: JSON.parse(localStorage.getItem('arCompleted')||'[]'),
@@ -140,7 +173,8 @@ function showQuestion(){
   state.lockedAnswer=false;$('#message').textContent='';
   document.querySelectorAll('.answer').forEach(b=>b.disabled=false);
   const item=state.order[state.q];
-  $('#cardPlane').setAttribute('src',item.image);
+  $('#cardPlane').setAttribute('src','#'+item.assetId);
+  $('#cardPlane').setAttribute('material','src','#'+item.assetId);
   $('#arWord').setAttribute('value','');
   $('#question').innerHTML=`What is it? <button class="smallbtn" onclick="speak('What is it?')">🔊</button>`;
   $('#reading').textContent='เลือกคำศัพท์ภาษาอังกฤษที่ตรงกับภาพ AR';
@@ -183,8 +217,8 @@ $('#backBtn').onclick=goMenu;$('#menuBtn').onclick=goMenu;
 $('#nextBtn').onclick=()=>{const n=state.stageIndex+1;n<5?startStage(n):goMenu()}
 $('#resetBtn').onclick=()=>{if(confirm('ต้องการล้างคะแนนและล็อกด่านใหม่หรือไม่?')){localStorage.removeItem('arUnlocked');localStorage.removeItem('arCompleted');location.reload()}}
 const marker=$('#hiroMarker');
-marker.addEventListener('markerFound',()=>{$('#markerStatus').textContent='พบ Marker แล้ว! ดูภาพและเลือกคำตอบ 🎯'});
-marker.addEventListener('markerLost',()=>{$('#markerStatus').textContent='ส่องกล้องไปที่ HIRO Marker'});
+marker.addEventListener('markerFound',()=>{$('#markerStatus').textContent='พบ Marker แล้ว! ภาพควรปรากฏเหนือกรอบสีดำ 🎯'; $('#cardPlane').setAttribute('visible','true')});
+marker.addEventListener('markerLost',()=>{$('#markerStatus').textContent='ยังไม่พบ Marker — วางให้เรียบ มีแสง และเห็นกรอบดำครบทั้ง 4 ด้าน'});
 </script>
 </body>
 </html>
